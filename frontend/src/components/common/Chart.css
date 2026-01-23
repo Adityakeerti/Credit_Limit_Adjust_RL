@@ -1,0 +1,18 @@
+.chart-container {
+  width: 100%;
+  padding: 1rem;
+}
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg-dark);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+

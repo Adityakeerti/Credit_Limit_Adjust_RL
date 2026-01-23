@@ -1,0 +1,377 @@
+.dashboard-container {
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.user-profile .avatar {
+  width: 45px;
+  height: 45px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.header-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-btn.active {
+  color: white;
+  background: var(--glass-border);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.user-profile .avatar:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.dashboard-section {
+  padding: 24px;
+  height: 100%;
+  min-height: 400px;
+}
+
+.section-header {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 0.75rem;
+}
+
+/* Lending System Styles */
+.lending-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.balance-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.balance-display .label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.balance-display .value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.action-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dashboard-btn {
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.dashboard-btn.primary {
+  background: var(--accent-gradient);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 210, 255, 0.2);
+}
+
+.dashboard-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 210, 255, 0.3);
+}
+
+.dashboard-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid var(--glass-border);
+}
+
+.dashboard-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.active-loans h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.loan-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+}
+
+.loan-item .negative {
+  color: #ff4d4d;
+  font-weight: 600;
+}
+
+/* Assets Styles */
+.assets-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Transaction Styles */
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  transition: transform 0.2s;
+}
+
+.transaction-item:hover {
+  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tx-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.tx-icon.buy {
+  background: rgba(0, 255, 200, 0.1);
+  color: #00ffc8;
+}
+
+.tx-icon.sell {
+  background: rgba(255, 100, 100, 0.1);
+  color: #ff6464;
+}
+
+.tx-icon.borrow {
+  background: rgba(255, 200, 0, 0.1);
+  color: #ffc800;
+}
+
+.tx-details {
+  flex: 1;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tx-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.tx-amount {
+  font-weight: 700;
+  margin-right: 1rem;
+}
+
+.tx-status {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tx-status.completed {
+  color: #00ffc8;
+  background: rgba(0, 255, 200, 0.1);
+}
+
+.tx-status.active {
+  color: #ffc800;
+  background: rgba(255, 200, 0, 0.1);
+}
+
+/* Banker Theme Dashboard Overrides */
+.home-container.banker-theme .dashboard-container {
+  background: transparent;
+}
+
+.home-container.banker-theme .dashboard-section {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 16px;
+}
+
+.home-container.banker-theme .dashboard-section:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+
+.home-container.banker-theme .section-header {
+  color: #1e293b !important;
+  border-bottom-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+.home-container.banker-theme .dashboard-title {
+  color: #1e293b !important;
+}
+
+.home-container.banker-theme .balance-display {
+  background: rgba(248, 250, 252, 0.8) !important;
+  border: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.home-container.banker-theme .balance-display .label {
+  color: #64748b !important;
+}
+
+.home-container.banker-theme .balance-display .value {
+  color: #1e293b !important;
+}
+
+.home-container.banker-theme .dashboard-btn.primary {
+  background: linear-gradient(135deg, #10b9a0, #14a08c) !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 160, 0.3) !important;
+}
+
+.home-container.banker-theme .dashboard-btn.primary:hover {
+  box-shadow: 0 6px 24px rgba(16, 185, 160, 0.4) !important;
+}
+
+.home-container.banker-theme .dashboard-btn.secondary {
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: #475569 !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+.home-container.banker-theme .dashboard-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.home-container.banker-theme .loan-item {
+  background: rgba(248, 250, 252, 0.8) !important;
+  border: 1px solid rgba(226, 232, 240, 0.5) !important;
+}
+
+.home-container.banker-theme .transaction-item {
+  background: rgba(248, 250, 252, 0.8) !important;
+  border: 1px solid rgba(226, 232, 240, 0.5) !important;
+}
+
+.home-container.banker-theme .transaction-item:hover {
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.home-container.banker-theme .tx-title {
+  color: #1e293b !important;
+}
+
+.home-container.banker-theme .tx-date {
+  color: #64748b !important;
+}
+
+.home-container.banker-theme .tx-amount {
+  color: #1e293b !important;
+}
+
+.home-container.banker-theme .nav-btn {
+  color: #475569 !important;
+}
+
+.home-container.banker-theme .nav-btn:hover {
+  color: #1e293b !important;
+  background: rgba(16, 185, 160, 0.1) !important;
+}
+
+.home-container.banker-theme .nav-btn.active {
+  color: white !important;
+  background: linear-gradient(135deg, #10b9a0, #14a08c) !important;
+}
