@@ -1,0 +1,283 @@
+/* BankerHome.css - Admin-specific styling for Home page */
+
+/* Apply light theme when banker class is present */
+.home-container.banker-theme {
+    background: linear-gradient(135deg, #e8f5f3 0%, #d4ede8 50%, #f0f9f4 100%) !important;
+}
+
+.home-container.banker-theme .home-header {
+    background: linear-gradient(135deg, rgba(16, 185, 160, 0.95), rgba(20, 160, 140, 0.95)) !important;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 24px rgba(16, 185, 160, 0.25);
+    border-radius: 0 0 20px 20px;
+    margin: 0 16px;
+}
+
+.home-container.banker-theme .logo {
+    background: linear-gradient(135deg, #ffffff, #e0f2f1) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+}
+
+.home-container.banker-theme .pill-nav-container {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.home-container.banker-theme .pill-nav-slider {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.home-container.banker-theme .pill-btn {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.home-container.banker-theme .pill-btn.active {
+    color: white !important;
+}
+
+.home-container.banker-theme .wallet-box {
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.home-container.banker-theme .wallet-box:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.home-container.banker-theme .wallet-box-label,
+.home-container.banker-theme .wallet-box-balance {
+    color: white !important;
+}
+
+.home-container.banker-theme .role-badge {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
+}
+
+.home-container.banker-theme .avatar {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Main Content Area - Light Theme */
+.home-container.banker-theme .main-view-content,
+.home-container.banker-theme .dashboard-view-content {
+    background: transparent !important;
+}
+
+/* Glass Cards for Banker Theme */
+.home-container.banker-theme .glass,
+.home-container.banker-theme .glass-card,
+.home-container.banker-theme .stat-card,
+.home-container.banker-theme .chart-card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
+}
+
+.home-container.banker-theme .glass:hover,
+.home-container.banker-theme .glass-card:hover {
+    background: rgba(255, 255, 255, 0.85) !important;
+    transform: translateY(-2px);
+}
+
+/* Section Titles */
+.home-container.banker-theme .section-title,
+.home-container.banker-theme h2,
+.home-container.banker-theme h3 {
+    color: #1e293b !important;
+}
+
+/* Text Colors */
+.home-container.banker-theme .section-broadcast,
+.home-container.banker-theme .section-portfolio {
+    color: #1e293b;
+}
+
+.home-container.banker-theme .section-header-row .section-title {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .live-pill {
+    background: rgba(13, 148, 136, 0.15) !important;
+    color: #0d9488 !important;
+}
+
+/* Asset Cards in Broadcast */
+.home-container.banker-theme .asset-card,
+.home-container.banker-theme .broadcast-item .asset-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+}
+
+.home-container.banker-theme .asset-card .asset-name {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .asset-card .asset-type {
+    color: #64748b !important;
+    background: rgba(13, 148, 136, 0.1) !important;
+}
+
+.home-container.banker-theme .asset-card .asset-price {
+    color: #0d9488 !important;
+}
+
+/* Portfolio Table */
+.home-container.banker-theme .portfolio-table-container {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+.home-container.banker-theme table th {
+    background: rgba(248, 250, 252, 0.9) !important;
+    color: #475569 !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
+}
+
+.home-container.banker-theme table td {
+    color: #1e293b !important;
+    border-bottom: 1px solid rgba(241, 245, 249, 0.5) !important;
+}
+
+.home-container.banker-theme table tr:hover td {
+    background: rgba(248, 250, 252, 0.5) !important;
+}
+
+/* User Type Badge */
+.home-container.banker-theme .user-type-badge {
+    background: rgba(13, 148, 136, 0.15) !important;
+    color: #0d9488 !important;
+    border: 1px solid rgba(13, 148, 136, 0.3) !important;
+}
+
+/* Dashboard Stats */
+.home-container.banker-theme .stat-value {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .stat-label {
+    color: #64748b !important;
+}
+
+.home-container.banker-theme .stat-change.positive {
+    color: #059669 !important;
+}
+
+.home-container.banker-theme .stat-change.negative {
+    color: #dc2626 !important;
+}
+
+/* Transaction Items */
+.home-container.banker-theme .transaction-item,
+.home-container.banker-theme .activity-item {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+}
+
+.home-container.banker-theme .transaction-item:hover,
+.home-container.banker-theme .activity-item:hover {
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.home-container.banker-theme .transaction-description,
+.home-container.banker-theme .activity-description {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .transaction-date,
+.home-container.banker-theme .activity-date {
+    color: #64748b !important;
+}
+
+/* Dropdown Menu */
+.home-container.banker-theme .profile-dropdown {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+.home-container.banker-theme .dropdown-item {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .dropdown-item:hover {
+    background: rgba(13, 148, 136, 0.1) !important;
+    color: #0d9488 !important;
+}
+
+.home-container.banker-theme .dropdown-name {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .dropdown-email {
+    color: #64748b !important;
+}
+
+/* Settings Modal */
+.home-container.banker-theme .settings-modal {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+.home-container.banker-theme .settings-modal h2 {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .settings-modal label {
+    color: #475569 !important;
+}
+
+.home-container.banker-theme .settings-modal input {
+    background: rgba(248, 250, 252, 0.8) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .settings-modal input:focus {
+    border-color: #0d9488 !important;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1) !important;
+}
+
+/* Quick Stats for Banker */
+.home-container.banker-theme .quick-stats-grid {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+.home-container.banker-theme .quick-stat-card {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+}
+
+.home-container.banker-theme .quick-stat-value {
+    color: #1e293b !important;
+}
+
+.home-container.banker-theme .quick-stat-label {
+    color: #64748b !important;
+}
+
+/* Lending System (hidden for bankers but style anyway) */
+.home-container.banker-theme .lending-card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+/* Empty States */
+.home-container.banker-theme .empty-state {
+    color: #64748b !important;
+}
+
+.home-container.banker-theme .empty-state-icon {
+    opacity: 0.6;
+}
