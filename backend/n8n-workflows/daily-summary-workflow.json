@@ -1,0 +1,136 @@
+{
+    "name": "Daily Portfolio Summary",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "triggerAtHour": 9
+                        }
+                    ]
+                }
+            },
+            "id": "daily-trigger",
+            "name": "Daily at 9 AM",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                220,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://172.25.192.1:8081/api/n8n/metrics",
+                "options": {}
+            },
+            "id": "fetch-metrics",
+            "name": "Fetch Metrics",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                440,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://172.25.192.1:8081/api/n8n/transactions?limit=10",
+                "options": {}
+            },
+            "id": "fetch-transactions",
+            "name": "Fetch Recent Transactions",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                440,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "mergeByFields": {
+                    "values": []
+                },
+                "options": {}
+            },
+            "id": "merge-data",
+            "name": "Merge Data",
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 2.1,
+            "position": [
+                660,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "options": {},
+                "text": "=Daily Summary\n\nTotal Users: {{ $json.totalUsers }}\nActive Users: {{ $json.activeUsers }}\nTotal Transactions: {{ $json.totalTransactions }}\nTotal Volume: {{ $json.totalVolume }}\nAverage Risk Score: {{ $json.averageRiskScore }}"
+            },
+            "id": "format-message",
+            "name": "Format Message",
+            "type": "n8n-nodes-base.markdown",
+            "typeVersion": 1,
+            "position": [
+                880,
+                400
+            ]
+        }
+    ],
+    "connections": {
+        "Daily at 9 AM": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Metrics",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Fetch Recent Transactions",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Metrics": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Recent Transactions": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Data",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge Data": {
+            "main": [
+                [
+                    {
+                        "node": "Format Message",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

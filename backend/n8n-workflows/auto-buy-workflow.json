@@ -1,0 +1,127 @@
+{
+    "name": "Auto-Buy on Low Price",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "minutes",
+                            "minutesInterval": 5
+                        }
+                    ]
+                }
+            },
+            "id": "schedule-trigger",
+            "name": "Every 5 Minutes",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                220,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://172.25.192.1:8081/api/n8n/assets",
+                "options": {}
+            },
+            "id": "fetch-assets",
+            "name": "Fetch Assets",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                440,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "number": [
+                        {
+                            "value1": "={{ $json.priceVex }}",
+                            "operation": "smaller",
+                            "value2": 100
+                        }
+                    ]
+                }
+            },
+            "id": "check-price",
+            "name": "Price < 100?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                660,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://172.25.192.1:8081/api/n8n/webhook/buy",
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "userId",
+                            "value": "0efadcd4-417a-4c8d-bace-685a34baae22"
+                        },
+                        {
+                            "name": "assetCode",
+                            "value": "={{ $json.code }}"
+                        },
+                        {
+                            "name": "quantity",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "execute-buy",
+            "name": "Execute Buy",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                880,
+                200
+            ]
+        }
+    ],
+    "connections": {
+        "Every 5 Minutes": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Assets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Assets": {
+            "main": [
+                [
+                    {
+                        "node": "Price < 100?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Price < 100?": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Buy",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
