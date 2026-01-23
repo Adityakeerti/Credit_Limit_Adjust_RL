@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: autolend
+
+  # Primary Datasource - Bank DB
+  datasource:
+    url: jdbc:postgresql://localhost:5432/arthacore_bank
+    username: postgres
+    password: aditya
+    driver-class-name: org.postgresql.Driver
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+
+  # Cache Configuration
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000
+
+# Secondary Datasource - Risk DB (configured programmatically)
+risk:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/arthacore_risk
+    username: postgres
+    password: aditya
+    driver-class-name: org.postgresql.Driver
+
+# JWT Configuration
+jwt:
+  secret: YXJ0aGFjb3JlLWF1dG9sZW5kLXNlY3JldC1rZXktZm9yLWp3dC1zaWduaW5nLTIwMjY=
+  expiration: 86400000  # 24 hours in ms
+
+# Server Configuration
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Logging
+logging:
+  level:
+    com.lendingbackend: DEBUG
+    org.springframework.security: DEBUG
