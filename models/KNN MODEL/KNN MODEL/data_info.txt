@@ -1,0 +1,17 @@
+Columns:
+['name', 'age', 'monthly income', 'account limit', 'date of transaction', 'time of transaction', 'type', 'transaction amount', 'amount left']
+
+First Row:
+{'name': 'Nitesh Murthy', 'age': 63, 'monthly income': '₹89,177.32', 'account limit': '₹891,773.20', 'date of transaction': '10/29/2025', 'time of transaction': '11:57:56', 'type': 'Debit', 'transaction amount': '₹13,271.95', 'amount left': '₹152,515.01'}
+
+Data Types:
+name                     str
+age                    int64
+monthly income           str
+account limit            str
+date of transaction      str
+time of transaction      str
+type                     str
+transaction amount       str
+amount left              str
+dtype: object
