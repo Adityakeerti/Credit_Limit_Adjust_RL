@@ -4,6 +4,8 @@ import AssetCard from '../components/AssetCard';
 import Chart from '../components/common/Chart';
 import TradeModal from '../components/modals/TradeModal';
 import BankerMainContent from '../components/BankerMainContent';
+import NFTOwnership from '../components/NFTOwnership';
+import AgentPanel from '../components/AgentPanel';
 import { useApp } from '../context/AppContext';
 import { getAllAssets, getPortfolio } from '../services/assetService';
 import './MainContent.css';
@@ -303,6 +305,12 @@ const MainContent = () => {
                     </GlassCard>
                 </section>
             )}
+
+            {/* NFT Ownership Section - Hidden for Bankers */}
+            {!isAdmin && <NFTOwnership />}
+
+            {/* Agent Automation Panel - Hidden for Bankers */}
+            {!isAdmin && <AgentPanel />}
         </div>
     );
 };
