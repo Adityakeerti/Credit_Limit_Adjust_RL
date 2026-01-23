@@ -1,0 +1,17 @@
+Model Accuracy: 0.9625
+
+Classification Report:
+                precision    recall  f1-score   support
+
+    Good Payer       0.97      0.99      0.98        76
+    Late Payer       1.00      1.00      1.00         2
+Frequent Payer       0.00      0.00      0.00         2
+
+      accuracy                           0.96        80
+     macro avg       0.66      0.66      0.66        80
+  weighted avg       0.95      0.96      0.96        80
+
+Confusion Matrix:
+[[75  0  1]
+ [ 0  2  0]
+ [ 2  0  0]]
