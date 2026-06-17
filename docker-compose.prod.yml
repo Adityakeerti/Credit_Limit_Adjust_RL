@@ -1,0 +1,179 @@
+version: '3.8'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AutoLend — Production Docker Compose
+# Uses Traefik for TLS + reverse-proxy, Valkey (open-source Redis fork) for cache
+# Run: docker stack deploy -c docker-compose.prod.yml autolend
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Traefik reverse-proxy + TLS (Let's Encrypt) ────────────────────────────
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--certificatesresolvers.le.acme.httpChallenge.entrypoint=web"
+      - "--certificatesresolvers.le.acme.email=${ACME_EMAIL:-you@example.com}"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    restart: unless-stopped
+
+  # ── Frontend (React + Nginx) ────────────────────────────────────────────────
+  frontend:
+    image: ${DOCKER_REGISTRY:-yourrepo}/autolend-frontend:${TAG:-latest}
+    build:
+      context: ./frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN:-localhost}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=le"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # ── Backend (Spring Boot) ──────────────────────────────────────────────────
+  backend:
+    image: ${DOCKER_REGISTRY:-yourrepo}/autolend-backend:${TAG:-latest}
+    build:
+      context: ./backend
+    environment:
+      # PostgreSQL
+      SPRING_DATASOURCE_URL: ${POSTGRES_URL:-jdbc:postgresql://postgres:5432/arthacore_bank}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-aditya}
+      # Risk DB
+      RISK_DATASOURCE_URL: ${RISK_POSTGRES_URL:-jdbc:postgresql://postgres:5432/arthacore_risk}
+      RISK_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      RISK_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-aditya}
+      # Valkey (Redis-compatible open-source cache)
+      SPRING_DATA_REDIS_HOST: ${VALKEY_HOST:-valkey}
+      SPRING_DATA_REDIS_PORT: ${VALKEY_PORT:-6379}
+      SPRING_DATA_REDIS_PASSWORD: ${VALKEY_PASSWORD:-}
+      SPRING_DATA_REDIS_SSL_ENABLED: ${VALKEY_SSL:-false}
+      # Kafka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-kafka:29092}
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      # Misc
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "false"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`${DOMAIN:-localhost}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=le"
+      - "traefik.http.services.backend.loadbalancer.server.port=8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: autolend-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aditya}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # ── Valkey (open-source Redis fork — drop-in replacement) ─────────────────
+  valkey:
+    image: valkey/valkey:8-alpine
+    container_name: autolend-valkey
+    command: >
+      valkey-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1
+      --loglevel warning
+    volumes:
+      - valkeydata:/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Zookeeper ──────────────────────────────────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: autolend-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Kafka ──────────────────────────────────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: autolend-kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9092"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  valkeydata:
+  letsencrypt:

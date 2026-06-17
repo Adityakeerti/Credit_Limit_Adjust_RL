@@ -19,8 +19,8 @@ cox_model = CoxRiskModel()
 agent = DoubleDQNAgent()
 pipeline = DataPipeline()
 
-# Persistance paths
-MODEL_DIR = "models"
+# Persistence paths — resolve relative to this script's location → ../../models (project root)
+MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "models")
 os.makedirs(MODEL_DIR, exist_ok=True)
 COX_PATH = os.path.join(MODEL_DIR, "cox_model.pkl")
 AGENT_PATH = os.path.join(MODEL_DIR, "rl_policy.pt")
