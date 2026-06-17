@@ -1,57 +1,61 @@
-:root {
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --accent-color: #00d2ff;
-  --accent-gradient: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
-  --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-  --font-main: 'Outfit', sans-serif;
-}
+/* ===================================================================
+   index.css  –  Global reset & base styles
+   =================================================================== */
+@import './design-tokens.css';
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: var(--font-main);
-  background: var(--bg-gradient);
-  background-attachment: fixed; /* fix gradient on scroll */
-  color: var(--text-primary);
-  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: var(--text-body-md);
+  color: var(--colors-ink);
+  background: var(--colors-canvas);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--colors-surface-soft); }
+::-webkit-scrollbar-thumb { background: var(--colors-hairline); border-radius: var(--rounded-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--colors-muted-soft); }
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--colors-primary);
+  outline-offset: 2px;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* Number spans */
+.num {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--text-number);
+  letter-spacing: 0;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--glass-border);
-  border-radius: 4px;
+/* Utility */
+.up   { color: var(--colors-semantic-up); }
+.down { color: var(--colors-semantic-down); }
+.muted { color: var(--colors-muted); }
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Utilities */
-.text-gradient {
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-input, button {
-  font-family: inherit;
+@media (max-width: 640px) {
+  .container { padding: 0 var(--spacing-base); }
 }

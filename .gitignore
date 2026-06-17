@@ -1,0 +1,18 @@
+# Secrets — never commit these
+.env
+.env.local
+.env.production
+*.pem
+*.key
+*.p12
+
+# Build artifacts
+frontend/dist/
+frontend/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

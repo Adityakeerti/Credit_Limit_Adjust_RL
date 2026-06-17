@@ -124,5 +124,12 @@ class DoubleDQNAgent:
         torch.save(self.policy_net.state_dict(), path)
 
     def load(self, path):
-        self.policy_net.load_state_dict(torch.load(path, map_location=self.device))
+        checkpoint = torch.load(path, map_location=self.device)
+        # Handle both plain state_dict and full checkpoint dict formats
+        if isinstance(checkpoint, dict) and "policy_net_state_dict" in checkpoint:
+            state_dict = checkpoint["policy_net_state_dict"]
+        else:
+            state_dict = checkpoint
+        self.policy_net.load_state_dict(state_dict)
         self.target_net.load_state_dict(self.policy_net.state_dict())
+        self.policy_net.eval()
