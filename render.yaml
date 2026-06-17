@@ -1,0 +1,56 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Render Blueprint — AutoLend
+# Docs: https://render.com/docs/blueprint-spec
+# Deploy: connect your GitHub repo at dashboard.render.com → New → Blueprint
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  # ── Spring Boot Backend ────────────────────────────────────────────────────
+  - type: web
+    name: autolend-backend
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free          # free tier — sleeps after 15 min idle
+    region: oregon      # closest to Neon us-east-1
+
+    healthCheckPath: /actuator/health
+
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://ep-odd-fire-aik5y0tq.c-4.us-east-1.aws.neon.tech/arthacore_bank?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        value: neondb_owner
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false      # ← Render will prompt you to enter this securely
+
+      - key: RISK_DATASOURCE_URL
+        value: jdbc:postgresql://ep-odd-fire-aik5y0tq.c-4.us-east-1.aws.neon.tech/arthacore_risk?sslmode=require
+      - key: RISK_DATASOURCE_USERNAME
+        value: neondb_owner
+      - key: RISK_DATASOURCE_PASSWORD
+        sync: false
+
+      - key: SPRING_DATA_REDIS_HOST
+        value: literate-skylark-128984.upstash.io
+      - key: SPRING_DATA_REDIS_PORT
+        value: "6379"
+      - key: SPRING_DATA_REDIS_PASSWORD
+        sync: false
+      - key: SPRING_DATA_REDIS_SSL_ENABLED
+        value: "true"
+
+      - key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        value: localhost:9092
+
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRATION
+        value: "86400000"
+
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_JPA_SHOW_SQL
+        value: "false"
+      - key: SERVER_PORT
+        value: "8080"

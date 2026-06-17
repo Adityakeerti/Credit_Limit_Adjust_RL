@@ -11,7 +11,7 @@ env:
   IMAGE_PREFIX: ${{ github.repository_owner }}/autolend
 
 jobs:
-  # ── Build & push Docker images ────────────────────────────────────────────
+  # ── Build & push Docker images ─────────────────────────────────────────────
   build:
     name: Build & Push Images
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ── Deploy frontend to Vercel ─────────────────────────────────────────────
+  # ── Deploy frontend to Vercel ──────────────────────────────────────────────
   deploy-frontend:
     name: Deploy Frontend → Vercel
     runs-on: ubuntu-latest
@@ -86,33 +86,17 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-  # ── Deploy backend to Koyeb ───────────────────────────────────────────────
+  # ── Deploy backend to Render ───────────────────────────────────────────────
   deploy-backend:
-    name: Deploy Backend → Koyeb
+    name: Deploy Backend → Render
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy to Koyeb
-        uses: koyeb/action-git-deploy@v1
-        with:
-          api-token: ${{ secrets.KOYEB_API_TOKEN }}
-          app-name: autolend-backend
-          service-name: api
-          docker: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-backend:${{ github.sha }}
-          env: |
-            SPRING_DATASOURCE_URL=${{ secrets.POSTGRES_URL }}
-            SPRING_DATASOURCE_USERNAME=${{ secrets.POSTGRES_USER }}
-            SPRING_DATASOURCE_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            RISK_DATASOURCE_URL=${{ secrets.RISK_POSTGRES_URL }}
-            RISK_DATASOURCE_USERNAME=${{ secrets.POSTGRES_USER }}
-            RISK_DATASOURCE_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            SPRING_DATA_REDIS_HOST=${{ secrets.VALKEY_HOST }}
-            SPRING_DATA_REDIS_PORT=${{ secrets.VALKEY_PORT }}
-            SPRING_DATA_REDIS_PASSWORD=${{ secrets.VALKEY_PASSWORD }}
-            SPRING_DATA_REDIS_SSL_ENABLED=${{ secrets.VALKEY_SSL }}
-            SPRING_KAFKA_BOOTSTRAP_SERVERS=${{ secrets.KAFKA_BOOTSTRAP_SERVERS }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-          ports: "8080:http"
-          health-checks: "http:8080:/actuator/health"
+      # Render auto-deploys when you push to main (if connected to GitHub).
+      # This step triggers a manual redeploy via Render Deploy Hook as a fallback.
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"

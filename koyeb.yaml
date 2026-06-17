@@ -1,0 +1,58 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Koyeb Service Definition — AutoLend Backend
+# Deploy with: koyeb app init autolend --definition koyeb.yaml
+# Or just fill in env vars manually in the Koyeb dashboard.
+# ─────────────────────────────────────────────────────────────────────────────
+name: autolend
+services:
+  - name: api
+    type: web
+    git:
+      repository: github.com/YOUR_ORG/YOUR_REPO   # ← update this
+      branch: main
+      build_command: ""
+      run_command: ""
+      buildpack: ""
+    docker:
+      # Built via CI/CD — point to your GitHub Container Registry image
+      image: ghcr.io/YOUR_ORG/autolend-backend:latest   # ← update this
+    instance_types:
+      - type: nano   # free tier
+    regions:
+      - was           # Washington DC — closest to Neon us-east-1
+    ports:
+      - port: 8080
+        protocol: http
+    health_checks:
+      - http:
+          path: /actuator/health
+          port: 8080
+    env:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://ep-odd-fire-aik5y0tq.c-4.us-east-1.aws.neon.tech/arthacore_bank?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        value: neondb_owner
+      - key: SPRING_DATASOURCE_PASSWORD
+        secret: SPRING_DATASOURCE_PASSWORD   # set as secret in Koyeb dashboard
+      - key: RISK_DATASOURCE_URL
+        value: jdbc:postgresql://ep-odd-fire-aik5y0tq.c-4.us-east-1.aws.neon.tech/arthacore_risk?sslmode=require
+      - key: RISK_DATASOURCE_USERNAME
+        value: neondb_owner
+      - key: RISK_DATASOURCE_PASSWORD
+        secret: SPRING_DATASOURCE_PASSWORD
+      - key: SPRING_DATA_REDIS_HOST
+        value: literate-skylark-128984.upstash.io
+      - key: SPRING_DATA_REDIS_PORT
+        value: "6379"
+      - key: SPRING_DATA_REDIS_PASSWORD
+        secret: SPRING_DATA_REDIS_PASSWORD   # set as secret in Koyeb dashboard
+      - key: SPRING_DATA_REDIS_SSL_ENABLED
+        value: "true"
+      - key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        value: localhost:9092   # update if using Upstash Kafka
+      - key: JWT_SECRET
+        secret: JWT_SECRET
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_JPA_SHOW_SQL
+        value: "false"
