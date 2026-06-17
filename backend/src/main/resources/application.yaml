@@ -3,25 +3,34 @@ spring:
     name: autolend
 
   # Primary Datasource - Bank DB
-  # Override via env: SPRING_DATASOURCE_URL / USERNAME / PASSWORD
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/arthacore_bank}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:aditya}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
+      minimum-idle: 1
+      idle-timeout: 300000
+      connection-test-query: SELECT 1
 
-  # JPA Configuration
+  # JPA Configuration — dialect set explicitly so Hibernate never needs to auto-detect
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
-    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
     properties:
       hibernate:
-        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
     open-in-view: false
 
-  # Valkey Configuration (open-source Redis fork — 100% Redis protocol compatible)
-  # Override via env: SPRING_DATA_REDIS_HOST / PORT / PASSWORD / SSL_ENABLED
+  # Valkey / Redis (Upstash) — open-source Redis fork, 100% protocol compatible
   data:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
@@ -29,15 +38,21 @@ spring:
       password: ${SPRING_DATA_REDIS_PASSWORD:}
       ssl:
         enabled: ${SPRING_DATA_REDIS_SSL_ENABLED:false}
-      timeout: 2000ms
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 4
+          max-idle: 2
+          min-idle: 0
+          max-wait: 2000ms
 
-  # Cache Configuration (backed by Valkey)
+  # Cache Configuration (backed by Valkey/Redis)
   cache:
     type: redis
     redis:
       time-to-live: 300000
 
-# Secondary Datasource - Risk DB (configured programmatically)
+# Secondary Datasource - Risk DB (configured programmatically via risk.datasource.*)
 risk:
   datasource:
     url: ${RISK_DATASOURCE_URL:jdbc:postgresql://localhost:5432/arthacore_risk}
@@ -48,7 +63,7 @@ risk:
 # JWT Configuration
 jwt:
   secret: ${JWT_SECRET:YXJ0aGFjb3JlLWF1dG9sZW5kLXNlY3JldC1rZXktZm9yLWp3dC1zaWduaW5nLTIwMjY=}
-  expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in ms
+  expiration: ${JWT_EXPIRATION:86400000}
 
 # Server Configuration
 server:
@@ -57,7 +72,7 @@ server:
     include-message: always
     include-binding-errors: always
 
-# Actuator — health endpoint for Docker health checks, Koyeb, UptimeRobot
+# Actuator — /actuator/health for Docker/Render health checks
 management:
   endpoints:
     web:
@@ -70,5 +85,6 @@ management:
 # Logging
 logging:
   level:
-    com.lendingbackend: DEBUG
-    org.springframework.security: DEBUG
+    com.lendingbackend: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
