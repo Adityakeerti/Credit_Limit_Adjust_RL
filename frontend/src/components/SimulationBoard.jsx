@@ -167,6 +167,19 @@ function SimulationBoard({ sectionRef }) {
           </div>
         </div>
 
+        {/* Backend RL explanation (when backend responded) */}
+        {current._backendExplanation && (
+          <div className="rl-explanation">
+            <span className="rl-explanation__label">🤖 AI:</span>
+            <span>{current._backendExplanation}</span>
+            {current._backendConfidence != null && (
+              <span style={{ marginLeft: 'auto', color: 'var(--colors-primary)', fontWeight: 600 }}>
+                {(current._backendConfidence * 100).toFixed(0)}% conf.
+              </span>
+            )}
+          </div>
+        )}
+
         {/* Metric cards */}
         <div className="metric-grid">
           <MetricCard

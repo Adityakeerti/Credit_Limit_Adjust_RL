@@ -58,11 +58,16 @@ function CreditLimitBar({ used, total }) {
  * @returns {JSX.Element}
  */
 function UserDashboard() {
-  const { users, wallet, transactions, current } = useDemo()
+  const { users, wallet, transactions, current, liveWallet, backendReady } = useDemo()
   const { user } = users
 
-  const creditUsed  = current.creditLimit - Math.round(current.creditLimit * (1 - current.utilization))
-  const creditTotal = current.creditLimit
+  // Prefer live wallet credit limit if we have it; else fall from simulation state
+  const creditTotal = liveWallet
+    ? Math.round(liveWallet.totalCreditLimit || liveWallet.availableCredit + liveWallet.usedCredit)
+    : current.creditLimit
+  const creditUsed = liveWallet
+    ? Math.round(liveWallet.usedCredit)
+    : Math.round(current.creditLimit - Math.round(current.creditLimit * (1 - current.utilization)))
 
   return (
     <div className="user-dashboard">

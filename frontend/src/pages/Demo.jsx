@@ -12,6 +12,20 @@ import ArchitectureDiagram from '../components/ArchitectureDiagram'
 import { useDemo } from '../context/DemoContext'
 import './Demo.css'
 
+/* ─── Backend status pill ─── */
+function BackendStatusPill() {
+  const { backendReady } = useDemo()
+  return (
+    <span
+      className={`backend-pill ${backendReady ? 'backend-pill--live' : 'backend-pill--offline'}`}
+      title={backendReady ? 'Connected to https://autolend-backend.onrender.com' : 'Backend offline — running local simulation'}
+    >
+      <span className="backend-pill__dot" />
+      {backendReady ? 'Backend Live' : 'Offline Mode'}
+    </span>
+  )
+}
+
 /* ─── Top nav ─── */
 function TopNav({ onTour }) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -38,6 +52,9 @@ function TopNav({ onTour }) {
           <span className="live-dot" aria-hidden="true" />
           Step <span className="num">{current.step}</span>
         </div>
+
+        {/* Backend status */}
+        <BackendStatusPill />
 
         {/* Tour button */}
         <button
@@ -176,7 +193,7 @@ function Demo() {
               <h2 className="dashboards-section__title">Two Perspectives, One Simulation</h2>
               <p className="dashboards-section__sub">
                 The same RL state powers both the customer's credit card view and the
-                banker's risk-management dashboard. No backend required — everything runs in-browser.
+                banker's risk-management dashboard — driven live by the backend RL engine.
               </p>
             </div>
             <div className="dashboards-grid">
@@ -204,9 +221,9 @@ function Demo() {
         <section className="cta-band">
           <div className="container cta-band__inner">
             <h2 className="cta-band__title">Ready to run it yourself?</h2>
-            <p className="cta-band__sub">Clone the repo and start the demo with a single command.</p>
+            <p className="cta-band__sub">Backend live at <a href="https://autolend-backend.onrender.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--colors-primary)'}}>autolend-backend.onrender.com</a> · Clone the repo to run locally.</p>
             <div className="cta-band__code">
-              <code>git clone https://github.com/your-org/autolend &amp;&amp; cd autolend/frontend &amp;&amp; npm i &amp;&amp; npm run dev</code>
+              <code>git clone https://github.com/Adityakeerti/team404_Fin1 &amp;&amp; cd team404_Fin1/frontend &amp;&amp; npm i &amp;&amp; npm run dev</code>
             </div>
             <div className="cta-band__actions">
               <button
@@ -226,7 +243,7 @@ function Demo() {
         <div className="container site-footer__inner">
           <span className="site-footer__logo">⬡ AutoLend</span>
           <span className="site-footer__copy">
-            Built for HTW Hackathon 2026 · RL + Cox Survival Model · No backend required
+            Built for HTW Hackathon 2026 · Double DQN + Cox Survival Model · Live backend on Render
           </span>
           <span className="site-footer__legal muted">Demo data only. Not financial advice.</span>
         </div>

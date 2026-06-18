@@ -379,3 +379,71 @@
   .recruiter-banner__close { position: static; }
   .cta-band__title { font-size: var(--text-display-sm); }
 }
+
+/* ─── Backend status pill ─── */
+.backend-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  cursor: default;
+}
+.backend-pill--live {
+  background: rgba(0, 200, 100, 0.12);
+  border-color: rgba(0, 200, 100, 0.35);
+  color: #00d46a;
+}
+.backend-pill--offline {
+  background: rgba(120, 120, 140, 0.12);
+  border-color: rgba(120, 120, 140, 0.3);
+  color: rgba(180, 180, 200, 0.7);
+}
+.backend-pill__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.backend-pill--live .backend-pill__dot {
+  animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* ─── Backend explanation badge on Simulation Board ─── */
+.rl-explanation {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--colors-muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-top: 8px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rl-explanation__label {
+  color: var(--colors-primary);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .backend-pill { display: none; }
+}

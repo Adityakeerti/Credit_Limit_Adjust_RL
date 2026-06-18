@@ -76,8 +76,11 @@ function BankerDashboard() {
     approveLoan,
     rejectLoan,
     current,
+    liveMetrics,
+    backendReady,
   } = useDemo()
   const { banker } = users
+  const managedAccounts = liveMetrics?.totalUsers ?? banker.managedAccounts
 
   return (
     <div className="banker-dashboard">
@@ -103,7 +106,7 @@ function BankerDashboard() {
           <RiskMetric label="30-Day Default Rate"   value={(bankerRiskMetrics.defaultRate30d * 100).toFixed(2)} unit="%" type="down" />
           <RiskMetric label="Reserve Ratio"          value={(bankerRiskMetrics.reserveRatio * 100).toFixed(0)} unit="%" type="up" />
           <RiskMetric label="Total Exposure"         value={`$${(bankerRiskMetrics.totalExposure / 1_000_000).toFixed(1)}M`} />
-          <RiskMetric label="Managed Accounts"       value={banker.managedAccounts.toLocaleString()} />
+          <RiskMetric label="Managed Accounts"       value={(managedAccounts ?? 0).toLocaleString()} />
         </div>
       </div>
 
